@@ -1,0 +1,57 @@
+<%@ include file="aheader.jsp"%>
+<style>
+table {
+    width: 100%;
+    display:block;
+  border: 1px solid black;
+}
+thead {
+    display: inline-block;
+    width: 100%;
+    height: 100px;
+}
+tbody {
+    height: 200px;
+    display: inline-block;
+    width: 100%;
+    overflow: auto;
+}
+</style>
+
+<%@ page  import="java.sql.*" import="CT.*" import="java.io.*" import="databaseconnection.*" import="java.util.*"%>
+<table>
+<%
+
+	int i=0;
+	String stt2=(String)session.getAttribute("words");
+	String topic=(String)session.getAttribute("topic");
+	String[] words=stt2.split(";");
+	Vector<String> v=new Vector<String>();
+
+	Connection con=databasecon.getconnection();
+	Statement st=con.createStatement();
+	
+for(String word: words){
+i=0;
+%>
+<table>
+<tr><th><h1><%=word%>
+<%
+System.out.println("select * from tweets where topic='"+word.trim()+"' ");
+ResultSet rs=st.executeQuery("select * from tweets where topic='"+word.trim()+"'  order by sno");
+while(rs.next()){
+	%>
+	<tr><td><%=++i%>)  <%=rs.getString(3)%>>>  <%=rs.getString(4)%>
+
+	<%
+}
+%>
+</table>
+<br><br>
+<%
+}
+%>
+<form method="post" action="topic6.jsp">
+	<input type="submit" value="Sentiment Analysis">
+</form>
+<%@ include file="footer.jsp"%>
